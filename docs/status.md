@@ -2,20 +2,21 @@
 
 ## 当前阶段
 
-搭建中:fork 已完成,待隐藏 AI 入口并部署到 claw。
+v0 已上线(2026-08-31):fork 自 perler-beads-ai,已隐藏 AI 入口,静态部署在 claw,公网 basic auth 访问。
 
 ## 运行配置
 
 | 项目 | 值 |
 |------|-----|
 | 工具链 | `.mise.toml`(node 24) |
-| 目标地址 | https://pindou.philobscur.com.cn(basic auth: freya) |
+| 目标地址 | https://pindou.meowmeowmoon.com(basic auth: freya) |
 | 部署目标 | claw `/var/www/pindou/`,Caddy `file_server` |
 | 上游 | github.com/liangdabiao/perler-beads-ai @ main |
 
 ## 最近变更
 
 - 2026-08-31 — fork + 初始 spec/plan
+- 2026-08-31 — claw 上线:pindou.meowmeowmoon.com(basic auth + immutable 静态缓存)
 
 ## 已知问题
 

@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 把 fork 的拼豆图纸工具(隐藏 AI 入口)以纯静态形式部署到 claw,通过 `https://pindou.philobscur.com.cn`(basic auth)对外提供服务。
+**Goal:** 把 fork 的拼豆图纸工具(隐藏 AI 入口)以纯静态形式部署到 claw,通过 `https://pindou.meowmeowmoon.com`(basic auth)对外提供服务。
 
 **Architecture:** Next.js 15 静态导出(`output: "export"` 已在 next.config.ts 确认)→ 本地构建 `out/` → rsync 到 claw `/var/www/pindou/` → Caddy `file_server` + `basic_auth` + 自动 TLS。无后端、无数据库,图像处理全部在浏览器端。
 
@@ -97,7 +97,7 @@ node = "24"
 | 项目 | 值 |
 |------|-----|
 | 工具链 | `.mise.toml`(node 24) |
-| 目标地址 | https://pindou.philobscur.com.cn(basic auth: freya) |
+| 目标地址 | https://pindou.meowmeowmoon.com(basic auth: freya) |
 | 部署目标 | claw `/var/www/pindou/`,Caddy `file_server` |
 | 上游 | github.com/liangdabiao/perler-beads-ai @ main |
 
@@ -156,7 +156,7 @@ rsync -az --delete out/ claw:/var/www/pindou/
 站点块(追加在 Caddyfile 末尾;`freya` 后的哈希为 `caddy hash-password` 的运行时输出,只存在于该文件):
 
 ```
-pindou.philobscur.com.cn {
+pindou.meowmeowmoon.com {
 	encode zstd gzip
 
 	header {
@@ -385,13 +385,13 @@ Expected: `Serving HTTP on :: port 4173`(保持运行,冒烟后 Ctrl-C)
 
 **Interfaces:**
 - Consumes: Task 3 验证过的 `out/`;Task 1 的 `docs/setup.md` runbook
-- Produces: 线上服务 `https://pindou.philobscur.com.cn`
+- Produces: 线上服务 `https://pindou.meowmeowmoon.com`
 
 - [ ] **Step 1(GATE,用户操作): DNS A 记录**
 
-用户在域名控制台为 `philobscur.com.cn` 添加:`pindou` A 记录 → `43.134.43.207`。
+用户在域名控制台为 `meowmeowmoon.com` 添加:`pindou` A 记录 → `43.134.43.207`。
 
-验证:`dig +short pindou.philobscur.com.cn`
+验证:`dig +short pindou.meowmeowmoon.com`
 Expected: `43.134.43.207`。**未生效前不继续**(Caddy 签证书需要域名解析已指向 claw)。
 
 - [ ] **Step 2: 创建站点目录**
@@ -414,7 +414,7 @@ Expected: 输出一行 `$2a$14$...`。**此哈希只进入下一步的 Caddyfile
 把下面内容追加到 claw 的 `/etc/caddy/Caddyfile` 末尾(`<FREYA_BCRYPT_HASH>` 替换为 Step 4 的输出——这是密钥材料替换点,不是 placeholder):
 
 ```
-pindou.philobscur.com.cn {
+pindou.meowmeowmoon.com {
 	encode zstd gzip
 
 	header {
@@ -458,13 +458,13 @@ Expected: `Valid configuration` / `Config adapted successfully`,reload exit 0
 PINDOU_PASS='<用户提供的密码>'; # 仅当前 shell 有效,不写入任何文件
 ```
 
-Run: `curl -s -o /dev/null -w '%{http_code}\n' https://pindou.philobscur.com.cn/`
+Run: `curl -s -o /dev/null -w '%{http_code}\n' https://pindou.meowmeowmoon.com/`
 Expected: `401`(未认证)
 
-Run: `curl -u "freya:$PINDOU_PASS" -s -o /dev/null -w '%{http_code} %{time_total}s %{size_download}B\n' https://pindou.philobscur.com.cn/`
+Run: `curl -u "freya:$PINDOU_PASS" -s -o /dev/null -w '%{http_code} %{time_total}s %{size_download}B\n' https://pindou.meowmeowmoon.com/`
 Expected: `200`,记录首屏耗时(size 约几十 KB 的 HTML;首屏总耗时含 JS 需浏览器实测,此值为下限参考)
 
-Run: `ls out/_next/static/ | head` 任取一个实际文件路径代入:`curl -u "freya:$PINDOU_PASS" -sI "https://pindou.philobscur.com.cn/_next/static/<实际路径>" | grep -i cache-control`
+Run: `ls out/_next/static/ | head` 任取一个实际文件路径代入:`curl -u "freya:$PINDOU_PASS" -sI "https://pindou.meowmeowmoon.com/_next/static/<实际路径>" | grep -i cache-control`
 Expected: `cache-control: public, max-age=31536000, immutable`
 
 Run: `unset PINDOU_PASS`
@@ -477,7 +477,7 @@ Run: `unset PINDOU_PASS`
 v0 已上线(2026-08-31):fork 自 perler-beads-ai,已隐藏 AI 入口,静态部署在 claw,公网 basic auth 访问。
 ```
 
-"最近变更"追加一行:`- 2026-08-31 — claw 上线:pindou.philobscur.com.cn(basic auth + immutable 静态缓存)`
+"最近变更"追加一行:`- 2026-08-31 — claw 上线:pindou.meowmeowmoon.com(basic auth + immutable 静态缓存)`
 
 ```bash
 git add docs/status.md
@@ -500,7 +500,7 @@ git push origin main
 
 在 iPad / iPhone Safari 上:
 
-- [ ] 打开 `https://pindou.philobscur.com.cn`,弹出认证框,输入 freya / 密码,页面正常加载
+- [ ] 打开 `https://pindou.meowmeowmoon.com`,弹出认证框,输入 freya / 密码,页面正常加载
 - [ ] 上传一张照片,走通:生成图纸 → 切换色号系统 → 手动改色 → 导出 PNG / 采购清单
 - [ ] "添加到主屏幕",从主屏图标打开,PWA 内再认证一次后正常使用
 - [ ] 记录首屏主观速度,反馈是否符合预期(参考:新加坡机房,首次约 5-10 秒,之后走缓存)

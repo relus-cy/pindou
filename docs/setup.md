@@ -30,7 +30,7 @@ rsync -az --delete out/ claw:/var/www/pindou/
 站点块(追加在 Caddyfile 末尾;`freya` 后的哈希为 `caddy hash-password` 的运行时输出,只存在于该文件):
 
 ```
-pindou.philobscur.com.cn {
+pindou.meowmeowmoon.com {
 	encode zstd gzip
 
 	header {
@@ -46,6 +46,8 @@ pindou.philobscur.com.cn {
 
 	@immutable path /_next/static/*
 	header @immutable Cache-Control "public, max-age=31536000, immutable"
+
+	try_files {path} {path}.html {path}/index.html
 
 	file_server
 }
