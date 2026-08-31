@@ -97,7 +97,6 @@ import { TRANSPARENT_KEY, transparentColorData } from '../utils/pixelEditingUtil
 import DonationModal from '../components/DonationModal';
 import FocusModePreDownloadModal from '../components/FocusModePreDownloadModal';
 import ImageCropperModal from '../components/ImageCropperModal';
-import AIOptimizeModal from '../components/AIOptimizeModal';
 
 export default function Home() {
   const [originalImageSrc, setOriginalImageSrc] = useState<string | null>(null);
@@ -193,9 +192,6 @@ export default function Home() {
   const [cropperImageSrc, setCropperImageSrc] = useState<string>('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [pendingFile, setPendingFile] = useState<File | null>(null);
-
-  // 新增：AI优化弹窗状态
-  const [isAIOptimizeOpen, setIsAIOptimizeOpen] = useState<boolean>(false);
 
   // 放大镜切换处理函数
   const handleToggleMagnifier = () => {
@@ -663,37 +659,6 @@ export default function Home() {
     setIsCropperOpen(false);
     setCropperImageSrc('');
     setPendingFile(null);
-  };
-
-  // 处理AI优化打开
-  const handleAIOptimizeOpen = () => {
-    if (!originalImageSrc) {
-      alert('请先上传图片');
-      return;
-    }
-    setIsAIOptimizeOpen(true);
-  };
-
-  // 处理AI优化关闭
-  const handleAIOptimizeClose = () => {
-    setIsAIOptimizeOpen(false);
-  };
-
-  // 处理AI优化完成
-  const handleAIOptimized = (optimizedImageSrc: string) => {
-    // 使用优化后的图片替换原图，并重新处理
-    setOriginalImageSrc(optimizedImageSrc);
-    setMappedPixelData(null);
-    setGridDimensions(null);
-    setColorCounts(null);
-    setTotalBeadCount(0);
-    setInitialGridColorKeys(new Set());
-    setRemapTrigger(prev => prev + 1);
-
-    // 重置手动上色模式
-    setIsManualColoringMode(false);
-    setSelectedColor(null);
-    setIsEraseMode(false);
   };
 
   // 处理一键擦除模式切换
@@ -2172,16 +2137,6 @@ export default function Home() {
                     应用数字
                   </button>
                   <button
-                    onClick={handleAIOptimizeOpen}
-                    disabled={!originalImageSrc}
-                    className="inline-flex items-center justify-center h-9 px-3 text-sm rounded-md border border-purple-200 dark:border-purple-700 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-200 hover:bg-purple-100 dark:hover:bg-purple-800/40 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
-                  >
-                    <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                    AI优化
-                  </button>
-                  <button
                     onClick={handleAutoRemoveBackground}
                     disabled={!mappedPixelData || !gridDimensions}
                     className="inline-flex items-center justify-center h-9 px-3 text-sm rounded-md border border-blue-200 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-200 hover:bg-blue-100 dark:hover:bg-blue-800/40 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
@@ -2709,7 +2664,7 @@ export default function Home() {
                   </h3>
                   <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
                     <p className="text-gray-700 dark:text-gray-300">
-                      上传图片 → AI优化 → 去掉背景 → 下载图纸 → 专心拼豆
+                      上传图片 → 去掉背景 → 下载图纸 → 专心拼豆
                     </p>
                   </div>
                 </div>
@@ -2783,14 +2738,6 @@ export default function Home() {
         isOpen={isCropperOpen}
         onClose={handleCropCancel}
         onConfirm={handleCropConfirm}
-      />
-
-      {/* AI优化弹窗 */}
-      <AIOptimizeModal
-        imageSrc={originalImageSrc || ''}
-        isOpen={isAIOptimizeOpen}
-        onClose={handleAIOptimizeClose}
-        onOptimized={handleAIOptimized}
       />
     </div>
    </>
