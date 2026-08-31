@@ -47,7 +47,7 @@
 
 - **站点目录**:`/var/www/pindou/`;首次需 `sudo mkdir -p` 并 `chown ubuntu:ubuntu`,之后 rsync 直传无需 sudo。
 - **Caddy**:新增站点块 `pindou.meowmeowmoon.com`:
-  - `basic_auth`:用户 `freya`;密码哈希用 `caddy hash-password` 生成(bcrypt),只写入 claw 的 `/etc/caddy/Caddyfile`,**不进任何 git 仓库、不落文档**。
+  - `basic_auth`:用户 `meow`;密码哈希用 `caddy hash-password` 生成(bcrypt),只写入 claw 的 `/etc/caddy/Caddyfile`,**不进任何 git 仓库、不落文档**。
   - `root * /var/www/pindou` + `file_server`;TLS 由 Caddy 自动签发续期(443/tcp 已在安全组开放)。
   - 缓存策略:`/_next/static/*` 为内容哈希文件名,加 `Cache-Control: public, max-age=31536000, immutable` 长缓存,避免 basic auth 的 bcrypt 校验拖慢回访。
   - 与既有 Sub-Store 站点按域名分流,互不影响。
@@ -72,7 +72,7 @@
 
 claw:
 
-4. `curl -I https://pindou.meowmeowmoon.com` 未认证返回 401;带 `-u freya:***` 返回 200。
+4. `curl -I https://pindou.meowmeowmoon.com` 未认证返回 401;带 `-u meow:***` 返回 200。
 
 真机(需用户本人操作):
 
