@@ -40,7 +40,7 @@
 - **仓库**:
   - `origin`:github.com/relus-cy/pindou(公开 fork,已完成)
   - `upstream`:github.com/liangdabiao/perler-beads-ai(跟踪上游更新,已配置)
-- **项目脚手架**:按 `~/workspace/infra/templates/` 规范补齐 `CLAUDE.md` / `AGENTS.md` / `.mise.toml` / `docs/{status,decisions,setup}.md`。
+- **项目脚手架**:按 `~/workspace/infra/templates/` 规范取最小集——新增 `AGENTS.md`、`.mise.toml`(只留 node)、`docs/status.md`、`docs/setup.md`;上游已有的 `CLAUDE.md` 不覆盖,仅顶部加一行 `@AGENTS.md` 指针;`architecture.md` / `decisions.md` / `CONTEXT.md` 等长出真实内容再建(遵循 infra 升降级规则)。
 - **部署链路**:本地 `npm run build` → `rsync out/` → claw `/var/www/pindou/` → Caddy 静态服务。
 
 ## 5. 部署设计(claw)
@@ -49,7 +49,9 @@
 - **Caddy**:新增站点块 `pindou.philobscur.com.cn`:
   - `basic_auth`:用户 `freya`;密码哈希用 `caddy hash-password` 生成(bcrypt),只写入 claw 的 `/etc/caddy/Caddyfile`,**不进任何 git 仓库、不落文档**。
   - `root * /var/www/pindou` + `file_server`;TLS 由 Caddy 自动签发续期(443/tcp 已在安全组开放)。
+  - 缓存策略:`/_next/static/*` 为内容哈希文件名,加 `Cache-Control: public, max-age=31536000, immutable` 长缓存,避免 basic auth 的 bcrypt 校验拖慢回访。
   - 与既有 Sub-Store 站点按域名分流,互不影响。
+- **容量基线**(2026-08-31 实测):load 0.24/0.07/0.02,内存可用 2.5GB,磁盘余 19GB,eth0 日均收 215MB / 发 82MB;pindou 月增量 <1GB,性能与流量均无瓶颈。唯一预期管理:首屏约 3MB 静态资源,按出口 ≥3Mbps 估 5-10 秒,之后走缓存 + PWA。
 - **DNS 外部依赖**:`philobscur.com.cn` 需新增 A 记录 `pindou` → `43.134.43.207`,由用户在域名控制台操作。
 - **安全组**:维持现状(仅 443 / 22),无需变更。
 
