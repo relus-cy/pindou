@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "拼豆生成器",
+    title: "meowmeow拼豆",
   },
   icons: {
     icon: [
