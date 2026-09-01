@@ -9,14 +9,14 @@ v0 已上线(2026-08-31):fork 自 perler-beads-ai,已隐藏 AI 入口,静态部�
 | 项目 | 值 |
 |------|-----|
 | 工具链 | `.mise.toml`(node 24) |
-| 目标地址 | https://pindou.meowmeowmoon.com(basic auth: meow) |
+| 目标地址 | https://pd.meowmeowmoon.com(basic auth: meow) |
 | 部署目标 | claw `/var/www/pindou/`,Caddy `file_server` |
 | 上游 | github.com/liangdabiao/perler-beads-ai @ main |
 
 ## 最近变更
 
 - 2026-08-31 — fork + 初始 spec/plan
-- 2026-08-31 — claw 上线:pindou.meowmeowmoon.com(basic auth + immutable 静态缓存)
+- 2026-08-31 — claw 上线:pd.meowmeowmoon.com(basic auth + immutable 静态缓存)
 
 ## 已知问题
 

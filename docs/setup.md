@@ -30,7 +30,7 @@ rsync -az --delete out/ claw:/var/www/pindou/
 站点块(追加在 Caddyfile 末尾;`meow` 后的哈希为 `caddy hash-password` 的运行时输出,只存在于该文件):
 
 ```
-pindou.meowmeowmoon.com {
+pd.meowmeowmoon.com {
 	encode zstd gzip
 
 	header {
