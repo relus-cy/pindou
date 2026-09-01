@@ -398,7 +398,16 @@ export async function downloadImage({
     const titleStartX = brandBlockWidth + titleBarHeight * 0.3;
     const mainTitleY = titleBarHeight * 0.4;
     
-    ctx.fillText('LDB', titleStartX, mainTitleY);
+    // 主标题较长时等比缩小字号，避免与右侧二维码重叠
+    const mainTitleText = 'meowmeow拼豆';
+    const maxMainTitleWidth = downloadWidth - qrSize - titleBarHeight * 0.25 - titleStartX;
+    const mainTitleWidth = ctx.measureText(mainTitleText).width;
+    if (mainTitleWidth > maxMainTitleWidth) {
+      const shrunkTitleFontSize = Math.floor(mainTitleFontSize * maxMainTitleWidth / mainTitleWidth);
+      ctx.font = `600 ${shrunkTitleFontSize}px system-ui, -apple-system, sans-serif`;
+    }
+    
+    ctx.fillText(mainTitleText, titleStartX, mainTitleY);
     
     // 5. 副标题 - 功能说明
     ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
@@ -621,7 +630,7 @@ export async function downloadImage({
 
     // 副水印：放在网格左上角，简洁版本
     const secondaryWatermarkFontSize = Math.max(10, Math.floor(downloadCellSize * 0.5));
-    const secondaryText = '@LDB';
+    const secondaryText = 'meowmeow拼豆';
     
     ctx.font = `500 ${secondaryWatermarkFontSize}px system-ui, -apple-system, sans-serif`;
     const secondaryMetrics = ctx.measureText(secondaryText);
@@ -747,7 +756,7 @@ export async function downloadImage({
       
       // 统计区域水印 - 第三重保护，清晰明显
       const statsWatermarkFontSize = Math.max(10, Math.floor(statsFontSize * 0.7));
-      const statsWatermarkText = '图纸来源：小红书@LDB';
+      const statsWatermarkText = '图纸来源：meowmeow拼豆';
       
       ctx.font = `500 ${statsWatermarkFontSize}px system-ui, -apple-system, sans-serif`;
       const statsTextMetrics = ctx.measureText(statsWatermarkText);

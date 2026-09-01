@@ -17,6 +17,7 @@ v0 已上线(2026-08-31):fork 自 perler-beads-ai,已隐藏 AI 入口,静态部�
 
 - 2026-08-31 — fork + 初始 spec/plan
 - 2026-08-31 — claw 上线:pd.meowmeowmoon.com(basic auth + immutable 静态缓存)
+- 2026-09-01 — 品牌调整为 meowmeow拼豆:删打赏按钮、头部简化、水印更名,已重新部署
 
 ## 已知问题
 
